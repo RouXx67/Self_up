@@ -6,6 +6,7 @@ import { History as HistoryIcon, Search, Download, Trash2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 const historyEvents = [
   { id: 1, date: "2024-03-20 14:30", app: "Nextcloud", event: "Mise à jour détectée", version: "28.0.1", type: "update" },
