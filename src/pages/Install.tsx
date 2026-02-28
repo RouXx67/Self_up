@@ -1,13 +1,11 @@
-"use client";
-
 import React from 'react';
-import DashboardLayout from '@/components/layout/DashboardLayout';
+import Layout from '../components/layout/DashboardLayout';
 import { Terminal, Server, Box } from 'lucide-react';
-import { InstallScript } from '@/components/install/InstallScript';
+import { InstallScript } from '../components/install/InstallScript';
 
-const Install = () => {
+export default function Install() {
   return (
-    <DashboardLayout>
+    <Layout>
       <div className="max-w-4xl space-y-8">
         <div>
           <h2 className="text-3xl font-bold text-slate-900 mb-2">Installation</h2>
@@ -43,8 +41,6 @@ const Install = () => {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </Layout>
   );
-};
-
-export default Install;
+}
