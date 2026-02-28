@@ -14,28 +14,28 @@ export default function Install() {
 
         <div className="grid gap-8">
           <InstallScript 
-            title="Installation Debian / Ubuntu"
-            description="Script d'installation automatisé pour les systèmes basés sur Debian."
+            title="Installation Standard (Docker)"
+            description="La méthode recommandée pour déployer SelfUp rapidement."
             icon={Server}
-            script={`curl -sSL https://install.selfup.sh | bash`}
+            script={`curl -sSL https://raw.githubusercontent.com/RouXx67/Self_up/main/install.sh | bash`}
           />
 
           <InstallScript 
             title="Installation LXC (Proxmox)"
-            description="Créez automatiquement un conteneur LXC optimisé pour SelfUp."
+            description="Script optimisé pour créer un environnement léger sur Proxmox."
             icon={Box}
-            script={`bash -c "$(wget -qLO - https://github.com/selfup/scripts/raw/main/lxc_install.sh)"`}
+            script={`bash -c "$(wget -qLO - https://raw.githubusercontent.com/RouXx67/Self_up/main/install_lxc.sh)"`}
           />
 
-          <div className="bg-amber-50 border border-amber-100 p-6 rounded-2xl flex gap-4">
-            <div className="p-2 bg-amber-100 rounded-lg h-fit">
-              <Terminal className="w-5 h-5 text-amber-700" />
+          <div className="bg-indigo-50 border border-indigo-100 p-6 rounded-2xl flex gap-4">
+            <div className="p-2 bg-indigo-100 rounded-lg h-fit">
+              <Terminal className="w-5 h-5 text-indigo-700" />
             </div>
             <div>
-              <h4 className="font-bold text-amber-900 mb-1">Note importante</h4>
-              <p className="text-sm text-amber-800 leading-relaxed">
-                Assurez-vous d'exécuter ces scripts en tant qu'utilisateur avec des privilèges sudo. 
-                Le script d'installation configurera automatiquement Docker, Node.js et les dépendances nécessaires.
+              <h4 className="font-bold text-indigo-900 mb-1">Dépôt GitHub</h4>
+              <p className="text-sm text-indigo-800 leading-relaxed">
+                Retrouvez l'intégralité du code source et contribuez au projet sur : <br />
+                <a href="https://github.com/RouXx67/Self_up" target="_blank" rel="noreferrer" className="font-mono font-bold underline">github.com/RouXx67/Self_up</a>
               </p>
             </div>
           </div>
