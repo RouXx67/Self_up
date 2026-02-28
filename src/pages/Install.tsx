@@ -17,14 +17,14 @@ export default function Install() {
             title="Installation Debian / Ubuntu"
             description="Script d'installation automatisé pour les systèmes basés sur Debian."
             icon={Server}
-            script="curl -sSL https://install.selfup.sh | bash"
+            script={`curl -sSL https://install.selfup.sh | bash`}
           />
 
           <InstallScript 
             title="Installation LXC (Proxmox)"
             description="Créez automatiquement un conteneur LXC optimisé pour SelfUp."
             icon={Box}
-            script="bash -c \"$(wget -qLO - https://github.com/selfup/scripts/raw/main/lxc_install.sh)\""
+            script={`bash -c "$(wget -qLO - https://github.com/selfup/scripts/raw/main/lxc_install.sh)"`}
           />
 
           <div className="bg-amber-50 border border-amber-100 p-6 rounded-2xl flex gap-4">
