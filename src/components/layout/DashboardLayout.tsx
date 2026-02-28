@@ -12,12 +12,14 @@ import {
   Sun,
   Search,
   Plus,
-  ShieldCheck
+  ShieldCheck,
+  Download
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MadeWithDyad } from "@/components/made-with-dyad";
+import AddAppDialog from '@/components/apps/AddAppDialog';
 
 const SidebarItem = ({ icon: Icon, label, to, active }: { icon: any, label: string, to: string, active: boolean }) => (
   <Link to={to}>
@@ -36,6 +38,7 @@ const SidebarItem = ({ icon: Icon, label, to, active }: { icon: any, label: stri
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const [isDarkMode, setIsDarkMode] = React.useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = React.useState(false);
 
   return (
     <div className={cn("min-h-screen flex bg-slate-50", isDarkMode && "dark bg-slate-950")}>
@@ -66,6 +69,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             label="Historique" 
             to="/history" 
             active={location.pathname === "/history"} 
+          />
+          <SidebarItem 
+            icon={Download} 
+            label="Installation" 
+            to="/install" 
+            active={location.pathname === "/install"} 
           />
           <SidebarItem 
             icon={Settings} 
@@ -106,7 +115,10 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
               <Bell className="w-5 h-5" />
               <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white" />
             </Button>
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl gap-2 px-6 shadow-lg shadow-indigo-100">
+            <Button 
+              onClick={() => setIsAddDialogOpen(true)}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl gap-2 px-6 shadow-lg shadow-indigo-100"
+            >
               <Plus className="w-4 h-4" />
               Ajouter
             </Button>
@@ -117,6 +129,8 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </div>
       </main>
+
+      <AddAppDialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen} />
     </div>
   );
 };

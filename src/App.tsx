@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Applications from "./pages/Applications";
 import Settings from "./pages/Settings";
 import History from "./pages/History";
+import Install from "./pages/Install";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/apps" element={<Applications />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/history" element={<History />} />
+          <Route path="/install" element={<Install />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
