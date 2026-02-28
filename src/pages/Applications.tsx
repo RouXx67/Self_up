@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { 
   Plus, 
@@ -10,7 +11,7 @@ import {
   RefreshCw,
   Github,
   Container,
-  Globe
+  Eye
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -68,12 +69,12 @@ const Applications = () => {
               {apps.map((app) => (
                 <tr key={app.id} className="hover:bg-slate-50/50 transition-colors group">
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
+                    <Link to={`/apps/${app.id}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                       <div className="p-2 bg-slate-100 rounded-lg group-hover:bg-white transition-colors">
                         <app.icon className="w-5 h-5 text-slate-600" />
                       </div>
                       <span className="font-bold text-slate-900">{app.name}</span>
-                    </div>
+                    </Link>
                   </td>
                   <td className="px-6 py-4">
                     <span className="text-sm text-slate-600">{app.provider}</span>
@@ -98,6 +99,11 @@ const Applications = () => {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
+                      <Link to={`/apps/${app.id}`}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-slate-400 hover:text-indigo-600">
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                      </Link>
                       <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg text-slate-400 hover:text-indigo-600">
                         <RefreshCw className="w-4 h-4" />
                       </Button>
