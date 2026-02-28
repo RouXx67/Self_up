@@ -13,7 +13,7 @@ interface InstallScriptProps {
   icon: LucideIcon;
 }
 
-const InstallScript = ({ title, description, script, icon: Icon }: InstallScriptProps) => {
+function InstallScript({ title, description, script, icon: Icon }: InstallScriptProps) {
   const [copied, setCopied] = React.useState(false);
 
   const handleCopy = () => {
@@ -50,9 +50,9 @@ const InstallScript = ({ title, description, script, icon: Icon }: InstallScript
       </div>
     </div>
   );
-};
+}
 
-const Install = () => {
+export default function Install() {
   return (
     <DashboardLayout>
       <div className="max-w-4xl space-y-8">
@@ -92,6 +92,4 @@ const Install = () => {
       </div>
     </DashboardLayout>
   );
-};
-
-export default Install;
+}
