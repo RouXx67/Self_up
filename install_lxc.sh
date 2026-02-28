@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-# Logo
+# VERSION DU SCRIPT
+SCRIPT_VERSION="1.2"
+
 echo -e "
   ____       _  __ _   _         
  / ___|  ___| |/ _| | | |_ __    
@@ -9,7 +11,7 @@ echo -e "
  |____/ \___|_|_|  \___/| .__/   
                         |_|      
 "
-echo "Bienvenue dans l'installateur Proxmox pour SelfUp !"
+echo "Bienvenue dans l'installateur Proxmox pour SelfUp ! (Version $SCRIPT_VERSION)"
 
 # Vérification Proxmox
 if [ ! -d /etc/pve ]; then
@@ -17,21 +19,18 @@ if [ ! -d /etc/pve ]; then
     exit 1
 fi
 
-# Détection des stockages supportant les conteneurs (rootdir)
-echo "Recherche des stockages compatibles..."
+# Détection des stockages compatibles
+echo "Recherche des stockages compatibles avec les conteneurs..."
 STORAGE_LIST=$(pvesm status -content rootdir | awk 'NR>1 {print $1}')
 
 if [ -z "$STORAGE_LIST" ]; then
-    echo "❌ Erreur : Aucun stockage compatible avec les conteneurs n'a été trouvé."
+    echo "❌ Erreur : Aucun stockage compatible trouvé. Vérifiez vos stockages Proxmox."
     exit 1
 fi
 
-# Paramètres par défaut
+# Paramètres
 CTID=$(pvesh get /cluster/nextid)
 PCT_NAME="selfup"
-PCT_DISK="8"
-PCT_RAM="1024"
-PCT_CPU="1"
 
 echo -e "\n--- Configuration du conteneur LXC ---"
 read -p "ID du conteneur [$CTID]: " input_id
@@ -40,40 +39,37 @@ CTID=${input_id:-$CTID}
 read -p "Nom d'hôte [$PCT_NAME]: " input_name
 PCT_NAME=${input_name:-$PCT_NAME}
 
-echo -e "\nStockages disponibles pour le disque :"
+echo -e "\nStockages détectés sur votre système :"
 echo "$STORAGE_LIST"
-# On essaie de deviner le meilleur (souvent local-lvm ou zfs)
 DEFAULT_STORAGE=$(echo "$STORAGE_LIST" | grep -E "local-lvm|data|zfs" | head -n1)
 DEFAULT_STORAGE=${DEFAULT_STORAGE:-$(echo "$STORAGE_LIST" | head -n1)}
 
 read -p "Choisissez votre stockage [$DEFAULT_STORAGE]: " input_storage
 PCT_STORAGE=${input_storage:-$DEFAULT_STORAGE}
 
-# Téléchargement du template
-echo -e "\n--- Préparation du template ---"
+# Template
+echo -e "\n--- Préparation du template Debian 12 ---"
 pveam update > /dev/null
 TEMPLATE=$(pveam available -section system | grep debian-12 | head -n1 | awk '{print $2}')
-echo "Utilisation du template : $TEMPLATE"
 pveam download local $TEMPLATE || true
 
-# Création du conteneur
-echo -e "\n--- Création du conteneur LXC $CTID ---"
+# Création
+echo -e "\n--- Création du conteneur LXC $CTID sur $PCT_STORAGE ---"
 if pct create $CTID local:vztmpl/$TEMPLATE \
     --hostname $PCT_NAME \
-    --cores $PCT_CPU \
-    --memory $PCT_RAM \
+    --cores 1 \
+    --memory 1024 \
     --net0 name=eth0,bridge=vmbr0,ip=dhcp \
-    --rootfs $PCT_STORAGE:$PCT_DISK \
+    --rootfs $PCT_STORAGE:8 \
     --onboot 1 \
     --unprivileged 1 \
     --features nesting=1; then
 
-    echo "✅ Conteneur créé avec succès."
-    echo "Démarrage..."
+    echo "✅ Conteneur créé. Démarrage..."
     pct start $CTID
     sleep 5
 
-    echo "Installation de SelfUp (Node.js, Git, etc.)..."
+    echo "Installation de SelfUp..."
     pct exec $CTID -- bash -c "
         apt-get update && apt-get install -y curl git sudo
         curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
@@ -85,7 +81,7 @@ if pct create $CTID local:vztmpl/$TEMPLATE \
         npm install -g serve
     "
 
-    echo "Configuration du service de démarrage..."
+    echo "Configuration du service..."
     pct exec $CTID -- bash -c "
 cat <<EOF > /etc/systemd/system/selfup.service
 [Unit]
@@ -106,12 +102,8 @@ systemctl enable --now selfup
 "
 
     IP=$(pct exec $CTID -- hostname -I | awk '{print $1}')
-    echo -e "\n🎉 Installation terminée avec succès !"
-    echo "-------------------------------------------------------"
-    echo "Accédez à l'interface : http://$IP:3000"
-    echo "-------------------------------------------------------"
+    echo -e "\n🎉 Installation terminée ! Accès : http://$IP:3000"
 else
-    echo -e "\n❌ ÉCHEC : Le stockage '$PCT_STORAGE' a refusé la création."
-    echo "Vérifiez vos stockages dans l'interface Proxmox (Datacenter > Storage)."
+    echo -e "\n❌ ÉCHEC : Le stockage '$PCT_STORAGE' n'est pas valide."
     exit 1
 fi
