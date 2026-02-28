@@ -40,15 +40,23 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [isDarkMode, setIsDarkMode] = React.useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
   return (
-    <div className={cn("min-h-screen flex bg-slate-50", isDarkMode && "dark bg-slate-950")}>
+    <div className="min-h-screen flex bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       {/* Sidebar */}
-      <aside className="w-72 bg-white border-r border-slate-200 flex flex-col p-6 fixed h-full z-20">
+      <aside className="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col p-6 fixed h-full z-20">
         <div className="flex items-center gap-3 mb-10 px-2">
           <div className="p-2 bg-indigo-600 rounded-lg">
             <ShieldCheck className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">SelfUp</h1>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">SelfUp</h1>
         </div>
 
         <nav className="space-y-2 flex-1">
@@ -84,12 +92,12 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           />
         </nav>
 
-        <div className="mt-auto pt-6 border-t border-slate-100">
-          <div className="bg-slate-50 rounded-2xl p-4 mb-4">
+        <div className="mt-auto pt-6 border-t border-slate-100 dark:border-slate-800">
+          <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 mb-4">
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Statut Système</p>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-slate-700">Vérificateur actif</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300">Vérificateur actif</span>
             </div>
           </div>
           <MadeWithDyad />
@@ -103,21 +111,26 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input 
               placeholder="Rechercher une application..." 
-              className="pl-10 bg-white border-slate-200 rounded-xl focus:ring-indigo-500"
+              className="pl-10 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 rounded-xl focus:ring-indigo-500"
             />
           </div>
 
           <div className="flex items-center gap-4">
-            <Button variant="outline" size="icon" className="rounded-xl border-slate-200" onClick={() => setIsDarkMode(!isDarkMode)}>
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="rounded-xl border-slate-200 dark:border-slate-800 dark:text-white" 
+              onClick={() => setIsDarkMode(!isDarkMode)}
+            >
               {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </Button>
-            <Button variant="outline" size="icon" className="rounded-xl border-slate-200 relative">
+            <Button variant="outline" size="icon" className="rounded-xl border-slate-200 dark:border-slate-800 dark:text-white relative">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white" />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full border-2 border-white dark:border-slate-900" />
             </Button>
             <Button 
               onClick={() => setIsAddDialogOpen(true)}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl gap-2 px-6 shadow-lg shadow-indigo-100"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl gap-2 px-6 shadow-lg shadow-indigo-100 dark:shadow-none"
             >
               <Plus className="w-4 h-4" />
               Ajouter

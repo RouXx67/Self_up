@@ -2,11 +2,18 @@
 
 import React from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
-import { Terminal, Copy, Check, Server, Box } from 'lucide-react';
+import { Terminal, Copy, Check, Server, Box, LucideIcon } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { showSuccess } from '@/utils/toast';
 
-const InstallScript = ({ title, description, script, icon: Icon }: { title: string, description: string, script: string, icon: any }) => {
+interface InstallScriptProps {
+  title: string;
+  description: string;
+  script: string;
+  icon: LucideIcon;
+}
+
+const InstallScript = ({ title, description, script, icon: Icon }: InstallScriptProps) => {
   const [copied, setCopied] = React.useState(false);
 
   const handleCopy = () => {
