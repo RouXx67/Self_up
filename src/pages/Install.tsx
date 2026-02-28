@@ -1,10 +1,10 @@
 "use client";
 
 import React from 'react';
-import DashboardLayout from '@/components/layout/DashboardLayout';
+import DashboardLayout from '../components/layout/DashboardLayout';
 import { Terminal, Copy, Check, Server, Box, LucideIcon } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { showSuccess } from '@/utils/toast';
+import { Button } from "../components/ui/button";
+import { showSuccess } from '../utils/toast';
 
 interface InstallScriptProps {
   title: string;
